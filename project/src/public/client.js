@@ -43,6 +43,7 @@ const App = (state) => {
     `
 }
 
+
 // listening for load event because page should load before any JS is called
 window.addEventListener('load', () => {
     render(root, store)
