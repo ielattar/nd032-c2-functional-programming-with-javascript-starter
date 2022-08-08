@@ -1,5 +1,5 @@
 let store = {
-    user: { name: "Student" },
+    user: { name: "Ihab" },
     apod: '',
     rovers: ['Curiosity', 'Opportunity', 'Spirit'],
 }
@@ -71,7 +71,6 @@ const ImageOfTheDay = (apod) => {
     const today = new Date()
     const photodate = new Date(apod.date)
     console.log(photodate.getDate(), today.getDate());
-
     console.log(photodate.getDate() === today.getDate());
     if (!apod || apod.date === today.getDate() ) {
         getImageOfTheDay(store)
@@ -86,8 +85,8 @@ const ImageOfTheDay = (apod) => {
         `)
     } else {
         return (`
-            <img src="${apod.image.url}" height="350px" width="100%" />
-            <p>${apod.image.explanation}</p>
+            <img src="${apod && apod.image.url}" height="350px" width="100%" />
+            <p>${apod && apod.image.explanation}</p>
         `)
     }
 }
@@ -96,11 +95,16 @@ const ImageOfTheDay = (apod) => {
 
 // Example API call
 const getImageOfTheDay = (state) => {
+	console.log("called");
+	console.log(state);
     let { apod } = state
-
+    //console.log(apod);
     fetch(`http://localhost:3000/apod`)
         .then(res => res.json())
-        .then(apod => updateStore(store, { apod }))
-
-    return data
+        .then(apod => {
+			updateStore(store, { apod })
+			console.log(store);
+		})
+        
+    //return data
 }
