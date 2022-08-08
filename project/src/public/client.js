@@ -37,6 +37,12 @@ const App = (state) => {
                     but generally help with discoverability of relevant imagery.
                 </p>
                 ${ImageOfTheDay(apod)}
+				<p><form method="get" action="rover"> 
+						<button> Curiosity  </button> 
+						<button> Opportunity  </button> 
+						<button> Spirit  </button> 
+					</form>
+				</p>
             </section>
         </main>
         <footer></footer>
