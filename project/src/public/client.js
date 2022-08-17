@@ -2,6 +2,8 @@ let store = {
     user: { name: "Ihab" },
     apod: '',
     rovers: ['Curiosity', 'Opportunity', 'Spirit'],
+	data:'',
+	active_rover:'Curiosity'
 }
 
 // add our markup to the page
@@ -19,7 +21,7 @@ const render = async (root, state) => {
 
 // create content
 const App = (state) => {
-    let { rovers, apod } = state
+    let { rovers, apod , data, active_rover } = state
 
     return `
         <header></header>
@@ -37,12 +39,7 @@ const App = (state) => {
                     but generally help with discoverability of relevant imagery.
                 </p>
                 ${ImageOfTheDay(apod)}
-				<p><form method="get" action="rover"> 
-						<button> Curiosity  </button> 
-						<button> Opportunity  </button> 
-						<button> Spirit  </button> 
-					</form>
-				</p>
+				${RoversDetails(rovers,active_rover,data)}
             </section>
         </main>
         <footer></footer>
@@ -54,6 +51,15 @@ const App = (state) => {
 window.addEventListener('load', () => {
     render(root, store)
 })
+
+
+function activateRover(rover){
+	//alert(store.active_rover);
+	//alert(rover);
+	store.active_rover=rover;
+	getRoverData(store)
+	//alert(document.getElementById("roverButton").innerHTML);
+}
 
 // ------------------------------------------------------  COMPONENTS
 
@@ -76,8 +82,8 @@ const ImageOfTheDay = (apod) => {
     // If image does not already exist, or it is not from today -- request it again
     const today = new Date()
     const photodate = new Date(apod.date)
-    console.log(photodate.getDate(), today.getDate());
-    console.log(photodate.getDate() === today.getDate());
+    //console.log(photodate.getDate(), today.getDate());
+    //console.log(photodate.getDate() === today.getDate());
     if (!apod || apod.date === today.getDate() ) {
         getImageOfTheDay(store)
     }
@@ -97,20 +103,77 @@ const ImageOfTheDay = (apod) => {
     }
 }
 
+
+const RoversDetails = (rovers, active_rover,data)=>{
+	rover_buttons= rovers.map(rover => {return `<button id="roverButton" onclick="activateRover(this.innerHTML)">${rover}</button>`})
+	
+	if (!data) {
+        getRoverData(store);
+    }
+	
+	rovers_html = rover_buttons.reduce((prev,curr)=> {return prev+curr});
+	
+	active_rover_html=`
+	<p><b> Rover Name : </b>${data && data.rover.rover.name}</p>
+	<p><b> Launch Date : </b>${data && data.rover.rover.launch_date}</p>
+	<p><b> Landing Date : </b>${data && data.rover.rover.landing_date}</p>
+	<p><b> Status : </b>${data && data.rover.rover.status}</p>
+		
+	`;
+	
+	return rovers_html+active_rover_html
+}
+
 // ------------------------------------------------------  API CALLS
 
 // Example API call
 const getImageOfTheDay = (state) => {
-	console.log("called");
-	console.log(state);
     let { apod } = state
     //console.log(apod);
     fetch(`http://localhost:3000/apod`)
-        .then(res => res.json())
+        .then(res => {
+			json_response=res.json();
+			//console.log(json_response);
+		 return json_response}
+			)
         .then(apod => {
+			//console.log(apod);
 			updateStore(store, { apod })
-			console.log(store);
+			
 		})
         
     //return data
 }
+
+
+/* const getRoversData = (state) => {
+
+    let { rovers } = state
+    rovers.map (arover => {
+     fetch(`http://localhost:3000/rovers/${arover}`)
+        .then(res => res.json())
+        .then(data => {
+			console.log(data);
+			updateStore(store, { data })
+		})
+		
+	})
+	console.log(store);
+} */
+
+
+const getRoverData = (state) => {
+
+    let {active_rover} = state    
+    fetch(`http://localhost:3000/rovers/${active_rover}`)
+        .then(res => res.json())
+        .then(data => {
+			//console.log(data);
+			updateStore(store, { data })
+		})
+		
+
+	console.log(store);
+}
+      
+
