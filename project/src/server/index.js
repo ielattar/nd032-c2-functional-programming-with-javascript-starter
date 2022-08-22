@@ -42,4 +42,19 @@ app.get('/rovers/:rover', async (req, res) => {
     }
 })
 
+
+
+app.get('/images/:rover', async (req, res) => {
+    try {
+		aRover=req.params.rover
+		console.log(aRover);
+	    /*https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity?api_key=ZBLDpiflRCxL7ra93X86kiRr6a3iJsPNCdOL8eWz*/
+        let rover = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${aRover}/latest_photos?api_key=${process.env.API_KEY}`)
+            .then(res => res.json())
+        res.send({rover})
+    } catch (err) {
+        console.log('error:', err);
+    }
+})
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

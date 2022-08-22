@@ -3,6 +3,7 @@ let store = {
     apod: '',
     rovers: ['Curiosity', 'Opportunity', 'Spirit'],
 	data:'',
+	images:'',
 	active_rover:'Curiosity'
 }
 
@@ -21,7 +22,7 @@ const render = async (root, state) => {
 
 // create content
 const App = (state) => {
-    let { rovers, apod , data, active_rover } = state
+    let { rovers, apod , data, active_rover,images } = state
 
     return `
         <header></header>
@@ -39,7 +40,7 @@ const App = (state) => {
                     but generally help with discoverability of relevant imagery.
                 </p>
                 ${ImageOfTheDay(apod)}
-				${RoversDetails(rovers,active_rover,data)}
+				${RoversDetails(rovers,active_rover,data,images)}
             </section>
         </main>
         <footer></footer>
@@ -57,7 +58,8 @@ function activateRover(rover){
 	//alert(store.active_rover);
 	//alert(rover);
 	store.active_rover=rover;
-	getRoverData(store)
+	getRoverData(store);
+	getRoverImages(store);
 	//alert(document.getElementById("roverButton").innerHTML);
 }
 
@@ -104,12 +106,16 @@ const ImageOfTheDay = (apod) => {
 }
 
 
-const RoversDetails = (rovers, active_rover,data)=>{
+const RoversDetails = (rovers, active_rover,data,images)=>{
 	rover_buttons= rovers.map(rover => {return `<button id="roverButton" onclick="activateRover(this.innerHTML)">${rover}</button>`})
 	
 	if (!data) {
         getRoverData(store);
     }
+	
+	if (!images){
+		getRoverImages(store);
+	}
 	
 	rovers_html = rover_buttons.reduce((prev,curr)=> {return prev+curr});
 	
@@ -118,7 +124,6 @@ const RoversDetails = (rovers, active_rover,data)=>{
 	<p><b> Launch Date : </b>${data && data.rover.rover.launch_date}</p>
 	<p><b> Landing Date : </b>${data && data.rover.rover.landing_date}</p>
 	<p><b> Status : </b>${data && data.rover.rover.status}</p>
-		
 	`;
 	
 	return rovers_html+active_rover_html
@@ -170,6 +175,21 @@ const getRoverData = (state) => {
         .then(data => {
 			//console.log(data);
 			updateStore(store, { data })
+		})
+		
+
+	//console.log(store);
+}
+
+
+const getRoverImages = (state) => {
+
+    let {active_rover} = state    
+    fetch(`http://localhost:3000/images/${active_rover}`)
+        .then(res => res.json())
+        .then(images => {
+			//console.log(data);
+			updateStore(store, { images })
 		})
 		
 
