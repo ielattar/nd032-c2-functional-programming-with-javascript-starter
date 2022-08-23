@@ -32,6 +32,11 @@ const App = (state) => {
               
                
 				${RoversDetails(rovers,active_rover,data,images)}
+				
+				${getRoverDetailsContent(data)}
+				
+				${getImagesDetailsContent(images) }
+				
             </section>
         </main>
         <footer></footer>
@@ -96,6 +101,18 @@ const ImageOfTheDay = (apod) => {
     }
 }
 
+// ---  High Order level functions
+function getRoverDetailsContent(data){
+	return (
+	`
+	<p><b> Rover Name : </b>${data && data.rover.rover.name}</p>
+	<p><b> Launch Date : </b>${data && data.rover.rover.launch_date}</p>
+	<p><b> Landing Date : </b>${data && data.rover.rover.landing_date}</p>
+	<p><b> Status : </b>${data && data.rover.rover.status}</p>
+	`
+	)
+}
+
 
 const RoversDetails = (rovers, active_rover,data,images)=>{
 	rover_buttons= rovers.map(rover => {return `<button id="roverButton" onclick="activateRover(this.innerHTML)">${rover}</button>`})
@@ -109,24 +126,25 @@ const RoversDetails = (rovers, active_rover,data,images)=>{
 	}
 	
 	rovers_html = rover_buttons.reduce((prev,curr)=> {return prev+curr});
-	
-	active_rover_html=`
-	<p><b> Rover Name : </b>${data && data.rover.rover.name}</p>
-	<p><b> Launch Date : </b>${data && data.rover.rover.launch_date}</p>
-	<p><b> Landing Date : </b>${data && data.rover.rover.landing_date}</p>
-	<p><b> Status : </b>${data && data.rover.rover.status}</p>
-	`;
+	return rovers_html
 	
 	
-	images_html=`<br/>
+	//return rovers_html+active_rover_html+images_html
+}
+
+
+
+
+
+function getImagesDetailsContent(images){
+	return (
+	 `<br/>
 			<p> <b> Latest Photo Date : </b> ${images && images.rover.latest_photos[0].earth_date}</p>
 			<img src="${images && images.rover.latest_photos[0].img_src}" height="100%" width="100%" />
-			
-	
-	`;
-	
-	return rovers_html+active_rover_html+images_html
+	`	
+	)
 }
+
 
 // ------------------------------------------------------  API CALLS
 
@@ -179,6 +197,8 @@ const getRoverData = (state) => {
 
 	//console.log(store);
 }
+
+
 
 
 const getRoverImages = (state) => {
