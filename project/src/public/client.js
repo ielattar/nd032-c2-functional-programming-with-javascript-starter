@@ -126,7 +126,14 @@ const RoversDetails = (rovers, active_rover,data,images)=>{
 	<p><b> Status : </b>${data && data.rover.rover.status}</p>
 	`;
 	
-	return rovers_html+active_rover_html
+	
+	images_html=`<br/>
+			<img src="${images && images.rover.latest_photos[0].img_src}" height="100%" width="100%" />
+			<p>${images && images.rover.latest_photos[0].earth_date}</p>
+	
+	`;
+	
+	return rovers_html+active_rover_html+images_html
 }
 
 // ------------------------------------------------------  API CALLS
