@@ -1,7 +1,9 @@
+
+
 let store = {
     user: { name: "Ihab" },
     apod: '',
-    rovers: ['Curiosity', 'Opportunity', 'Spirit'],
+    rovers: Immutable.List(['Curiosity', 'Opportunity', 'Spirit']),
 	data:'',
 	images:'',
 	active_rover:'Curiosity'
@@ -115,7 +117,8 @@ function getRoverDetailsContent(data){
 
 
 const RoversDetails = (rovers, active_rover,data,images)=>{
-	rover_buttons= rovers.map(rover => {return `<button id="roverButton" onclick="activateRover(this.innerHTML)">${rover}</button>`})
+	roversJs=rovers.toJS()
+	rover_buttons= roversJs.map(rover => {return `<button id="roverButton" onclick="activateRover(this.innerHTML)">${rover}</button>`})
 	
 	if (!data) {
         getRoverData(store);
