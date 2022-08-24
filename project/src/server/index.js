@@ -17,7 +17,7 @@ app.use('/', express.static(path.join(__dirname, '../public')))
 // example API call
 app.get('/apod', async (req, res) => {
     try {
-        let image = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${process.env.API_KEY}`)
+        const image = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${process.env.API_KEY}`)
             .then(res => {
 				const json_response=res.json()
 				//console.log(json_response)
@@ -34,7 +34,7 @@ app.get('/rovers/:rover', async (req, res) => {
 		aRover=req.params.rover
 		console.log(aRover);
 	    /*https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity?api_key=ZBLDpiflRCxL7ra93X86kiRr6a3iJsPNCdOL8eWz*/
-        let rover = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${aRover}?api_key=${process.env.API_KEY}`)
+        const rover = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${aRover}?api_key=${process.env.API_KEY}`)
             .then(res => res.json())
         res.send({rover})
     } catch (err) {
@@ -49,7 +49,7 @@ app.get('/images/:rover', async (req, res) => {
 		aRover=req.params.rover
 		console.log(aRover);
 	    /*https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity?api_key=ZBLDpiflRCxL7ra93X86kiRr6a3iJsPNCdOL8eWz*/
-        let rover = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${aRover}/latest_photos?api_key=${process.env.API_KEY}`)
+        const rover = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${aRover}/latest_photos?api_key=${process.env.API_KEY}`)
             .then(res => res.json())
         res.send({rover})
     } catch (err) {
