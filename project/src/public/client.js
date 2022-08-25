@@ -107,10 +107,12 @@ const ImageOfTheDay = (apod) => {
 function getRoverDetailsContent(data){
 	return (
 	`
+	<div class="info-container">
 	<p><b> Rover Name : </b>${data && data.rover.rover.name}</p>
 	<p><b> Launch Date : </b>${data && data.rover.rover.launch_date}</p>
 	<p><b> Landing Date : </b>${data && data.rover.rover.landing_date}</p>
 	<p><b> Status : </b>${data && data.rover.rover.status}</p>
+	</div>
 	`
 	)
 }
@@ -141,9 +143,11 @@ const RoversDetails = (rovers, active_rover,data,images)=>{
 
 function getImagesDetailsContent(images){
 	return (
-	 `<br/>
+	 `		<br/>
+			<div class="img-container">
 			<p> <b> Latest Photo Date : </b> ${images && images.rover.latest_photos[0].earth_date}</p>
 			<img src="${images && images.rover.latest_photos[0].img_src}" height="100%" width="100%" />
+			</div>
 	`	
 	)
 }

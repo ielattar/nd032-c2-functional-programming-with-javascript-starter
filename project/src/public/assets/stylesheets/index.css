@@ -20,9 +20,19 @@ footer {
   /* footer styles */
 }
 
+.image-container img {
+  padding: 20px;
+}
+
 /* -------------------  TABLET  --------------------- */
 @media (min-width: 768px) {
   /* use mobile */
+
+.image-container img {
+  width : 33.33% !important;
+}
+ 
+
 }
 
 /* -------------------  DESKTOP  -------------------- */
